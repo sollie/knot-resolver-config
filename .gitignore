@@ -1,0 +1,3 @@
+kresd.conf.d/10-fqdn.conf
+kresd.conf.d/data.mdb
+kresd.conf.d/lock.mdb
