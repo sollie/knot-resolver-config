@@ -7,7 +7,9 @@ addresses to bind to.
 
 kresd.conf.d/10-local.conf
 
-```fqdn = ''
+```
+fqdn = ''
 ipv4 = ''
-ipv6 = ''```
+ipv6 = ''
+```
 
