@@ -1,0 +1,9 @@
+[Unit]
+Description=hBlock blacklist
+
+[Service]
+Type=oneshot
+TimeoutSec=300
+ExecStartPre=/bin/sh -c 'until ping -c1 raw.githubusercontent.com; do sleep 10; done'
+ExecStart=/bin/sh -c '/usr/local/bin/update-blacklist-rpz'
+

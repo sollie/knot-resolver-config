@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -eu
+
+HBLOCK_DIR='/var/lib/knot-resolver/'
+HBLOCK_OUTPUT="${HBLOCK_DIR}/hblock.rpz"
+HBLOCK_OUTPUT_TMP=$(mktemp)
+HBLOCK_SOURCE_URL='https://hblock.molinero.dev/hosts_rpz.txt'
+
+printf '%s\n' 'Downloading blacklist zone...'
+
+cleanup() { rm -f "${HBLOCK_OUTPUT_TMP}"; }
+trap cleanup EXIT
+
+curl -R -o "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_SOURCE_URL}"
+chmod 644 "${HBLOCK_OUTPUT_TMP}"
+
+# Replace blacklist zone if it differs
+if ! cmp --silent "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_OUTPUT}"; then
+  mv -f "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_OUTPUT}"
+  # Restart Knot Resolver if it is running
+  if /bin/systemctl is-active --quiet kresd@1.service; then
+    systemctl restart kresd@*.service
+  fi
+fi
+
