@@ -5,14 +5,13 @@ set -eu
 HBLOCK_DIR='/var/lib/knot-resolver/'
 HBLOCK_OUTPUT="${HBLOCK_DIR}/hblock.rpz"
 HBLOCK_OUTPUT_TMP=$(mktemp)
-HBLOCK_SOURCE_URL='https://hblock.molinero.dev/hosts_rpz.txt'
 
 printf '%s\n' 'Downloading blacklist zone...'
 
 cleanup() { rm -f "${HBLOCK_OUTPUT_TMP}"; }
 trap cleanup EXIT
 
-curl -R -o "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_SOURCE_URL}"
+hblock --output "${HBLOCK_OUTPUT_TMP}" --template '\1 CNAME \2'  --redirection '.' --comment ';' --quiet
 chmod 644 "${HBLOCK_OUTPUT_TMP}"
 
 # Replace blacklist zone if it differs
@@ -23,4 +22,3 @@ if ! cmp --silent "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_OUTPUT}"; then
     systemctl restart kresd@*.service
   fi
 fi
-
