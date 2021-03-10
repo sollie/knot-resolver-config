@@ -11,7 +11,7 @@ printf '%s\n' 'Downloading blacklist zone...'
 cleanup() { rm -f "${HBLOCK_OUTPUT_TMP}"; }
 trap cleanup EXIT
 
-hblock --output "${HBLOCK_OUTPUT_TMP}" --template '\1 CNAME \2'  --redirection '.' --comment ';' --quiet
+hblock -W /etc/hblock.d/whitelist.list -B /etc/hblock.d/blacklist.list --output "${HBLOCK_OUTPUT_TMP}" --template '\1 CNAME \2'  --redirection '.' --comment ';' --quiet
 chmod 644 "${HBLOCK_OUTPUT_TMP}"
 
 # Replace blacklist zone if it differs
