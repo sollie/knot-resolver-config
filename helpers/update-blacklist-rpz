@@ -18,7 +18,4 @@ chmod 644 "${HBLOCK_OUTPUT_TMP}"
 if ! cmp --silent "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_OUTPUT}"; then
   mv -f "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_OUTPUT}"
   # Restart Knot Resolver if it is running
-  if /bin/systemctl is-active --quiet kresd@1.service; then
-    systemctl restart kresd@*.service
-  fi
 fi
