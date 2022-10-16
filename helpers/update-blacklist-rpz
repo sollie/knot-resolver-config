@@ -16,6 +16,6 @@ chmod 644 "${HBLOCK_OUTPUT_TMP}"
 
 # Replace blacklist zone if it differs
 if ! cmp --silent "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_OUTPUT}"; then
+  printf '%s\n' 'Replace blacklist zone...'
   mv -f "${HBLOCK_OUTPUT_TMP}" "${HBLOCK_OUTPUT}"
-  # Restart Knot Resolver if it is running
 fi
